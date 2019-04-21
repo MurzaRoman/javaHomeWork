@@ -1,5 +1,7 @@
 package HomeWork6;
 
+import java.util.InputMismatchException;
+
 public class ModelBooks {
     private Book[] books;
     private int index = -1;
@@ -67,7 +69,6 @@ public class ModelBooks {
 
 
     public int searchCountYear(int neededYear) {
-//        int neededYear = InputUtilityBooks.inputInt();
         int countYear = 0;
         for (int i = 0; i <= index; i++) {
             if (books[i].getYearOfPublishing() == neededYear) {
@@ -78,7 +79,10 @@ public class ModelBooks {
     }
 
     public ModelBooks searchFromYear() {
+      try {
         int neededYear = InputUtilityBooks.inputInt();
+        Validator validator = new Validator();
+        validator.inputValidateByYear(neededYear);
         if (searchCountYear(neededYear) > 0) {
             ModelBooks searchResult = new ModelBooks(searchCountYear(neededYear));
             for (int i = 0; i <= index; i++) {
@@ -91,5 +95,10 @@ public class ModelBooks {
             System.out.println("There is no book of this year in the library");
             return new ModelBooks(0);
         }
+      }
+      catch (InputMismatchException e) {
+          new ViewBooks().printMessage(ViewBooks.INCORRECT_INPUT);;
+          return searchFromYear();
+      }
     }
 }
